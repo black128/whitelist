@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjksrs.whitelist.mapper.Mappers">
+
+    <select id="list" resultType="com.bjksrs.whitelist.pojo.ProvinceCity" >
+        select id,companyName,regNo,creditCode,orgNo,address,telephone,mobile,province,errorProvince,city,errorCity,gmt_create as createTime,comments
+        from dim_company_province_case2 where state = 0 order by id desc limit #{offset},#{rows}
+    </select>
+
+    <update id="delete" parameterType="java.lang.String" >
+        update dim_company_province_case2 set state = 1 where id = #{id}
+    </update>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*) from dim_company_province_case2 where state = 0
+    </select>
+    <select id="getSearchTotal" parameterType="com.bjksrs.whitelist.pojo.SearchBean" resultType="java.lang.Integer">
+        select count(*) from dim_company_province_case2 where
+        state = 0
+        <if test="cmbProvince!=null and cmbProvince!='' ">
+            and province like #{cmbProvince}"%"
+        </if>
+        <if test="cmbCity!=null and cmbCity!=''">
+            and city like #{cmbCity}"%"
+        </if>
+        <if test="condition!=null and condition != ''">
+            <if test="content!=null and content != ''">
+                and ${condition} like #{content}
+            </if>
+        </if>
+    </select>
+
+    <select id="query" resultType="com.bjksrs.whitelist.pojo.ProvinceCity">
+        select  id,companyName,regNo,creditCode,orgNo,address,telephone,mobile,province,errorProvince,city,errorCity,gmt_create as createTime,comments
+        from dim_company_province_case2
+            where
+            state = 0
+            <if test="cmbProvince!=null and cmbProvince!='' ">
+                and province like #{cmbProvince}"%"
+            </if>
+            <if test="cmbCity!=null and cmbCity!=''">
+                and city like #{cmbCity}"%"
+            </if>
+            <if test="condition!=null and condition != ''">
+                <if test="content!=null and content != ''">
+                  and ${condition} like #{content}
+                </if>
+            </if>
+        order by id desc limit #{offset},#{rows}
+    </select>
+
+    <update id="updateData" parameterType="com.bjksrs.whitelist.pojo.ProvinceCity" >
+        update dim_company_province_case2 set
+        province = #{province},city = #{city},comments = #{comments}
+        where id = #{id}
+    </update>
+
+    <insert id="saveExcelData" parameterType="com.bjksrs.whitelist.pojo.ProvinceCity" >
+        INSERT INTO dim_company_province_case2(companyName, regNo, creditCode, orgNo, province, errorProvince, city, errorCity, state, comments, address, telephone, mobile)
+        VALUES (#{companyName}, #{regNo}, #{creditCode}, #{orgNo}, #{province}, #{errorProvince}, #{city}, #{errorCity}, 0, #{comments}, #{address}, #{telephone}, #{mobile})
+    </insert>
+
+    <select id="checkCompanyName" parameterType="com.bjksrs.whitelist.pojo.ProvinceCity" resultType="java.lang.Integer" >
+        select count(*) from dim_company_province_case2 where state =0 and companyName = #{companyName}
+    </select>
+
+    <select id="getPCByCompanyName" parameterType="java.lang.String" resultType="com.bjksrs.whitelist.pojo.ProvinceCity">
+        select id,companyName,regNo,creditCode,orgNo,address,telephone,mobile,province,errorProvince,city,errorCity,gmt_create as createTime,comments
+        from dim_company_province_case2 where state = 0 and companyName = #{companyName}
+    </select>
+
+    <select id="checkCreditCodeRegNo" resultType="java.lang.Integer">
+        select count(*) from dim_company_province_case2 where
+        state = 0 and creditCode = #{creditCode} and regNo = #{regNo}
+    </select>
+
+    <select id="checkCreditCode" resultType="java.lang.Integer">
+        select count(*) from dim_company_province_case2 where
+        state = 0 and creditCode = #{creditCode}
+    </select>
+
+    <select id="checkRegNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from dim_company_province_case2 where
+        state = 0 and regNo = #{regNo}
+    </select>
+    <select id="checkorgNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from dim_company_province_case2 where
+        state = 0 and orgNo = #{orgNo}
+    </select>
+    <select id="checkAddress" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from dim_company_province_case2 where
+        state = 0 and address = #{address}
+    </select>
+
+    <select id="checkMobile" resultType="java.lang.Integer">
+        select count(*) form dim_company_province_case2 where
+        state = 0 and companyName=#{companyName} and mobile like '%'#{number}'%'
+    </select>
+
+    <select id="getMobileData" resultType="com.bjksrs.whitelist.pojo.ProvinceCity">
+        select id,companyName,regNo,creditCode,orgNo,address,telephone,mobile,province,errorProvince,city,errorCity,gmt_create as createTime,comments
+        form dim_company_province_case2
+        where state = 0 and companyName=#{companyName} and mobile like '%'#{number}'%'
+    </select>
+
+    <update id="updateAllData" parameterType="com.bjksrs.whitelist.pojo.ProvinceCity" >
+        update dim_company_province_case2 set
+        companyName = #{companyName},regNo = #{regNo},creditCode = #{creditCode},orgNo = #{orgNo},errorProvince = #{errorProvince},
+        errorCity = #{errorCity},province = #{province},city = #{city},address = #{address},mobile = #{mobile},
+        telephone = #{telephone},comments = #{comments}
+        where id = #{id}
+    </update>
+
+    <select id="checkTelphone" resultType="java.lang.Integer">
+        select count(*) form dim_company_province_case2 where
+        state = 0 and companyName=#{companyName} and telephone = '%'#{number}'%'
+    </select>
+    <select id="getTelephoneData" resultType="com.bjksrs.whitelist.pojo.ProvinceCity">
+        select id,companyName,regNo,creditCode,orgNo,address,telephone,mobile,province,errorProvince,city,errorCity,gmt_create as createTime,comments
+        form dim_company_province_case2
+        where state = 0 and companyName=#{companyName} and telephone = '%'#{number}'%'
+    </select>
+
+</mapper>
